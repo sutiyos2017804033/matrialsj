@@ -1,0 +1,12 @@
+@media print {
+
+    .gambar {
+        margin-left: 200px;
+    
+    }
+
+    .pesan2, .tombolprint, .pesan3 {
+        display: none;
+    }
+  
+  }
