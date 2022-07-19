@@ -21,8 +21,7 @@
     <link href="<?php echo base_url() . 'assets/css/dataTables.bootstrap.min.css' ?>" rel="stylesheet">
     <link href="<?php echo base_url() . 'assets/css/jquery.dataTables.min.css' ?>" rel="stylesheet">
     <link href="<?php echo base_url() . 'assets/dist/css/bootstrap-select.css' ?>" rel="stylesheet">
-    <link rel="stylesheet" type="text/css"
-        href="<?php echo base_url() . 'assets/css/bootstrap-datetimepicker.min.css' ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url() . 'assets/css/bootstrap-datetimepicker.min.css' ?>">
 </head>
 
 <body>
@@ -57,7 +56,14 @@
                                 <th>Kode Barang</th>
                             </tr>
                             <tr>
-                                <th><input type="text" name="kode_brg" id="kode_brg" class="form-control input-sm"></th>
+                                <th><select class="form-control selectpicker" title="Cari Barang" data-live-search="true" name="kode_brg" id="kode_brg">
+                                        <?php
+                                        $var = $this->db->query("SELECT * FROM tbl_barang a join tbl_suplier b on a.id_supplier=b.suplier_id")->result_array();
+                                        foreach ($var as $key => $row) { ?>
+
+                                            <option value="<?= $row['barang_id'] ?>"><?= $row['barang_id'] ?> | <?= $row['barang_nama'] ?>| <?= $row['suplier_nama'] ?></option>
+                                        <?php } ?>
+                                    </select></th>
                             </tr>
                             <tr>
                                 <td>
@@ -82,13 +88,26 @@
                         <table>
                             <tr>
                                 <th style="width:100px;padding-bottom:5px;">No. Transaksi</th>
-                                <th style="width:300px;padding-bottom:5px;"><input type="text" name="nofak"
-                                        value="<?php echo $this->session->userdata('nofak'); ?>"
-                                        class="form-control input-sm" style="width:200px;" required></th>
+                                <th style="width:300px;padding-bottom:5px;">
+                                    <?php
+                                    $q = $this->db->query("SELECT MAX(RIGHT(beli_notrans,4)) AS kd_max FROM tbl_beli");
+                                    $kd = "";
+                                    if ($q->num_rows() > 0) {
+                                        foreach ($q->result() as $k) {
+                                            $tmp = ((int)$k->kd_max) + 1;
+                                            $kd = sprintf("%04s", $tmp);
+                                        }
+                                    } else {
+                                        $kd = "001";
+                                    }
+                                    $kds =  "BL" . $kd;
+
+                                    ?>
+                                    <input type="text" name="nofak" value="<?php echo $kds; ?>" class="form-control input-sm" style="width:200px;" required>
+                                </th>
                                 <th style="width:90px;padding-bottom:5px;">Suplier</th>
                                 <td style="width:350px;">
-                                    <select name="suplier" class="selectpicker show-tick form-control"
-                                        data-live-search="true" title="Pilih Suplier" data-width="100%" required>
+                                    <select name="suplier" class="selectpicker show-tick form-control" data-live-search="true" title="Pilih Suplier" data-width="100%" required>
                                         <?php foreach ($sup->result_array() as $i) {
                                             $id_sup = $i['suplier_id'];
                                             $nm_sup = $i['suplier_nama'];
@@ -107,9 +126,7 @@
                                 <th>Tanggal</th>
                                 <td>
                                     <div class='input-group date' id='datepicker' style="width:200px;">
-                                        <input type='text' name="tgl" class="form-control"
-                                            value="<?php echo $this->session->userdata('tglfak'); ?>"
-                                            placeholder="Tanggal..." required />
+                                        <input type='text' name="tgl" class="form-control" value="<?php echo $this->session->userdata('tglfak'); ?>" placeholder="Tanggal..." required />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -134,21 +151,19 @@
                             <tbody>
                                 <?php $i = 1; ?>
                                 <?php foreach ($this->cart->contents() as $items) : ?>
-                                <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
-                                <tr>
-                                    <td><?= $items['id']; ?></td>
-                                    <td><?= $items['name']; ?></td>
-                                    <td style="text-align:center;"><?= $items['satuan']; ?></td>
-                                    <td style="text-align:right;"><?php echo number_format($items['price']); ?></td>
-                                    <td style="text-align:right;"><?php echo number_format($items['harga']); ?></td>
-                                    <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
-                                    <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
-                                    <td style="text-align:center;"><a
-                                            href="<?php echo base_url() . 'admin/pembelian/remove/' . $items['rowid']; ?>"
-                                            class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a>
-                                    </td>
-                                </tr>
-                                <?php $i++; ?>
+                                    <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
+                                    <tr>
+                                        <td><?= $items['id']; ?></td>
+                                        <td><?= $items['name']; ?></td>
+                                        <td style="text-align:center;"><?= $items['satuan']; ?></td>
+                                        <td style="text-align:right;"><?php echo number_format($items['price']); ?></td>
+                                        <td style="text-align:right;"><?php echo number_format($items['harga']); ?></td>
+                                        <td style="text-align:center;"><?php echo number_format($items['qty']); ?></td>
+                                        <td style="text-align:right;"><?php echo number_format($items['subtotal']); ?></td>
+                                        <td style="text-align:center;"><a href="<?php echo base_url() . 'admin/pembelian/remove/' . $items['rowid']; ?>" class="btn btn-warning btn-xs"><span class="fa fa-close"></span> Batal</a>
+                                        </td>
+                                    </tr>
+                                    <?php $i++; ?>
                                 <?php endforeach; ?>
                             </tbody>
                             <tfoot>
@@ -214,15 +229,15 @@
                                 $kat_id = $a['barang_kategori_id'];
                                 $kat_nama = $a['kategori_nama'];
                             ?>
-                            <tr>
-                                <td style="text-align:center;"><?php echo $no; ?></td>
-                                <td><?php echo $id; ?></td>
-                                <td><?php echo $nm; ?></td>
-                                <td style="text-align:center;"><?php echo $satuan; ?></td>
-                                <td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
-                                <td style="text-align:center;"><?php echo $stok; ?></td>
+                                <tr>
+                                    <td style="text-align:center;"><?php echo $no; ?></td>
+                                    <td><?php echo $id; ?></td>
+                                    <td><?php echo $nm; ?></td>
+                                    <td style="text-align:center;"><?php echo $satuan; ?></td>
+                                    <td style="text-align:right;"><?php echo 'Rp ' . number_format($harjul); ?></td>
+                                    <td style="text-align:center;"><?php echo $stok; ?></td>
 
-                            </tr>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -270,113 +285,114 @@
     <script src="<?php echo base_url() . 'assets/js/bootstrap-datetimepicker.min.js' ?>"></script>
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#myda').DataTable();
-    });
+        $(document).ready(function() {
+            $('#myda').DataTable();
+        });
     </script>
 
 
 
     <script type="text/javascript">
-    $(function() {
-        $('#datetimepicker').datetimepicker({
-            format: 'DD MMMM YYYY HH:mm',
-        });
+        $(function() {
+            $('#datetimepicker').datetimepicker({
+                format: 'DD MMMM YYYY HH:mm',
+            });
 
-        $('#datepicker').datetimepicker({
-            format: 'YYYY-MM-DD',
-        });
-        $('#datepicker2').datetimepicker({
-            format: 'YYYY-MM-DD',
-        });
+            $('#datepicker').datetimepicker({
+                format: 'YYYY-MM-DD',
+            });
+            $('#datepicker2').datetimepicker({
+                format: 'YYYY-MM-DD',
+            });
 
-        $('#timepicker').datetimepicker({
-            format: 'HH:mm'
+            $('#timepicker').datetimepicker({
+                format: 'HH:mm'
+            });
         });
-    });
     </script>
     <script type="text/javascript">
-    $(function() {
-        $('.harpok').priceFormat({
-            prefix: '',
-            //centsSeparator: '',
-            centsLimit: 0,
-            thousandsSeparator: ','
+        $(function() {
+            $('.harpok').priceFormat({
+                prefix: '',
+                //centsSeparator: '',
+                centsLimit: 0,
+                thousandsSeparator: ','
+            });
+            $('.harjul').priceFormat({
+                prefix: '',
+                //centsSeparator: '',
+                centsLimit: 0,
+                thousandsSeparator: ','
+            });
         });
-        $('.harjul').priceFormat({
-            prefix: '',
-            //centsSeparator: '',
-            centsLimit: 0,
-            thousandsSeparator: ','
-        });
-    });
     </script>
 
 
 
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        //Ajax kabupaten/kota insert
-        $("#kode_brg").focus();
-        $("#kode_brg").keyup(function() {
-            var kobar = {
-                kode_brg: $(this).val()
-            };
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url() . 'admin/pembelian/get_barang'; ?>",
-                data: kobar,
-                success: function(msg) {
-                    $('#detail_barang').html(msg);
+        $(document).ready(function() {
+            //Ajax kabupaten/kota insert
+            $("#kode_brg").focus();
+
+            $("#kode_brg").on("change", function() {
+                var kobar = {
+                    kode_brg: $(this).val()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url() . 'admin/pembelian/get_barang'; ?>",
+                    data: kobar,
+                    success: function(msg) {
+                        $('#detail_barang').html(msg);
+                    }
+                });
+            });
+
+            $("#kode_brg").keypress(function(e) {
+                if (e.which == 13) {
+                    $("#jumlah").focus();
                 }
             });
         });
-
-        $("#kode_brg").keypress(function(e) {
-            if (e.which == 13) {
-                $("#jumlah").focus();
-            }
-        });
-    });
     </script>
 
 
     <!-- jQuery -->
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#mydata').DataTable({
-            "language": {
-                "search": "Cari",
-                "info": "Menampilkan _START_ Sampai _END_ Dari _TOTAL_ data",
-                "lengthMenu": "Menampilkan _MENU_ baris",
-                "infoEmpty": "Tidak ditemukan",
-                "infoFiltered": "(pencarian dari _MAX_ data)",
-                "zeroRecords": "Data tidak ditemukan",
-                "paginate": {
-                    "next": "Selanjutnya",
-                    "previous": "Sebelumnya",
+        $(document).ready(function() {
+            $('#mydata').DataTable({
+                "language": {
+                    "search": "Cari",
+                    "info": "Menampilkan _START_ Sampai _END_ Dari _TOTAL_ data",
+                    "lengthMenu": "Menampilkan _MENU_ baris",
+                    "infoEmpty": "Tidak ditemukan",
+                    "infoFiltered": "(pencarian dari _MAX_ data)",
+                    "zeroRecords": "Data tidak ditemukan",
+                    "paginate": {
+                        "next": "Selanjutnya",
+                        "previous": "Sebelumnya",
+                    }
                 }
-            }
+            });
         });
-    });
     </script>
     <script type="text/javascript">
-    $(function() {
-        $('.harpok').priceFormat({
-            prefix: '',
-            //centsSeparator: '',
-            centsLimit: 0,
-            thousandsSeparator: ','
+        $(function() {
+            $('.harpok').priceFormat({
+                prefix: '',
+                //centsSeparator: '',
+                centsLimit: 0,
+                thousandsSeparator: ','
+            });
+            $('.harjul').priceFormat({
+                prefix: '',
+                //centsSeparator: '',
+                centsLimit: 0,
+                thousandsSeparator: ','
+            });
         });
-        $('.harjul').priceFormat({
-            prefix: '',
-            //centsSeparator: '',
-            centsLimit: 0,
-            thousandsSeparator: ','
-        });
-    });
     </script>
 
 

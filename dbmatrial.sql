@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 05 Jul 2022 pada 03.24
+-- Waktu pembuatan: 19 Jul 2022 pada 05.50
 -- Versi server: 10.4.24-MariaDB
 -- Versi PHP: 7.4.29
 
@@ -37,6 +37,7 @@ CREATE TABLE `tbl_barang` (
   `barang_tgl_input` timestamp NULL DEFAULT current_timestamp(),
   `barang_tgl_last_update` datetime DEFAULT NULL,
   `barang_kategori_id` int(11) DEFAULT NULL,
+  `id_supplier` int(11) NOT NULL,
   `barang_user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -44,10 +45,10 @@ CREATE TABLE `tbl_barang` (
 -- Dumping data untuk tabel `tbl_barang`
 --
 
-INSERT INTO `tbl_barang` (`barang_id`, `barang_nama`, `barang_satuan`, `barang_harpok`, `barang_harjul`, `barang_stok`, `barang_tgl_input`, `barang_tgl_last_update`, `barang_kategori_id`, `barang_user_id`) VALUES
-('BR0006', 'Cat Nipon Paint1 Liter', 'Pcs', 70000, 80000, 36, '2021-10-09 10:24:35', '2022-07-05 05:10:23', 17, 1),
-('BR0008', 'Semen 3 Roda', 'Sak', 40000, 55000, 5, '2021-10-09 10:25:51', '2022-07-05 05:12:06', 18, 1),
-('BR0009', 'Palu', 'Pcs', 25000, 40000, 12, '2021-10-09 10:26:24', '2022-07-05 05:12:23', 15, 1);
+INSERT INTO `tbl_barang` (`barang_id`, `barang_nama`, `barang_satuan`, `barang_harpok`, `barang_harjul`, `barang_stok`, `barang_tgl_input`, `barang_tgl_last_update`, `barang_kategori_id`, `id_supplier`, `barang_user_id`) VALUES
+('BR0006', 'Cat Nipon Paint1 Liter', 'Pcs', 70000, 80000, 34, '2021-10-09 10:24:35', '2022-07-05 05:10:23', 17, 7, 1),
+('BR0008', 'Semen 3 Roda', 'Sak', 40000, 55000, 0, '2021-10-09 10:25:51', '2022-07-05 05:12:06', 18, 8, 1),
+('BR0009', 'Palu', 'Pcs', 25000, 40000, 11, '2021-10-09 10:26:24', '2022-07-05 05:12:23', 15, 9, 1);
 
 -- --------------------------------------------------------
 
@@ -67,8 +68,8 @@ CREATE TABLE `tbl_beli` (
 --
 
 INSERT INTO `tbl_beli` (`beli_notrans`, `beli_tanggal`, `beli_suplier_id`, `beli_user_id`) VALUES
-('BL003', '2022-04-23', 7, 1),
-('TR050722000015', '2022-07-05', 8, 1);
+('BL0001', '2022-05-18', 8, 1),
+('BL0002', '2022-07-15', 9, 1);
 
 -- --------------------------------------------------------
 
@@ -90,8 +91,8 @@ CREATE TABLE `tbl_detail_beli` (
 --
 
 INSERT INTO `tbl_detail_beli` (`d_beli_id`, `d_beli_notrans`, `d_beli_barang_id`, `d_beli_harga`, `d_beli_jumlah`, `d_beli_total`) VALUES
-(192, 'BL003', 'BR0011', 60000, 1, 60000),
-(195, 'TR050722000015', 'BR0006', 70000, 2, 140000);
+(197, 'BL0001', 'BR0012', 70000, 2, 140000),
+(198, 'BL0002', 'BR0008', 40000, 2, 80000);
 
 -- --------------------------------------------------------
 
@@ -117,12 +118,10 @@ CREATE TABLE `tbl_detail_jual` (
 --
 
 INSERT INTO `tbl_detail_jual` (`d_jual_id`, `d_jual_notrans`, `d_jual_barang_id`, `d_jual_barang_nama`, `d_jual_barang_satuan`, `d_jual_barang_harpok`, `d_jual_barang_harjul`, `d_jual_qty`, `d_jual_diskon`, `d_jual_total`) VALUES
-(112, 'TR040722000001', 'BR0007', 'Tas Pancing', 'Pcs', 60000, 80000, 1, 10000, 80000),
-(113, 'TR040722000001', 'BR0008', 'Jor Kayu ', 'Pcs', 15000, 20000, 1, 0, 20000),
-(114, 'TR050722000012', 'BR0008', 'Jor Kayu ', 'Pcs', 15000, 20000, 1, 0, 20000),
-(115, 'TR050722000013', 'BR0011', 'Jor Besi Panjang 2 M', 'Pcs', 60000, 80000, 1, 0, 80000),
-(116, 'TR050722000014', 'BR0008', 'Semen 3 Roda', 'Sak', 40000, 55000, 10, 0, 550000),
-(117, 'TR050722000015', 'BR0008', 'Semen 3 Roda', 'Sak', 40000, 55000, 5, 0, 275000);
+(120, 'TR150722000001', 'BR0006', 'Cat Nipon Paint1 Liter', 'Pcs', 70000, 80000, 1, 0, 80000),
+(121, 'TR150722000002', 'BR0009', 'Palu', 'Pcs', 25000, 40000, 1, 0, 40000),
+(122, 'TR150722000003', 'BR0008', 'Semen 3 Roda', 'Sak', 40000, 55000, 1, 0, 55000),
+(123, 'TR150722000004', 'BR0008', 'Semen 3 Roda', 'Sak', 40000, 55000, 1, 0, 55000);
 
 -- --------------------------------------------------------
 
@@ -145,21 +144,10 @@ CREATE TABLE `tbl_jual` (
 --
 
 INSERT INTO `tbl_jual` (`jual_notrans`, `jual_tanggal`, `jual_total`, `jual_jml_uang`, `jual_kembalian`, `jual_user_id`, `jual_keterangan`) VALUES
-('TR040722000001', '2022-07-04 21:32:48', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000002', '2022-07-04 21:38:41', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000003', '2022-07-04 21:39:17', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000004', '2022-07-04 21:39:39', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000005', '2022-07-04 21:40:15', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000006', '2022-07-04 21:40:26', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000007', '2022-07-04 21:40:39', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000008', '2022-07-04 21:40:51', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000009', '2022-07-04 21:41:03', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000010', '2022-07-04 21:41:11', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR040722000011', '2022-07-04 21:41:35', 90000, 100000, 10000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR050722000012', '2022-07-04 22:06:20', 20000, 20000, 0, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR050722000013', '2022-07-04 22:06:32', 80000, 100000, 20000, 3, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR050722000014', '2022-07-04 22:21:05', 550000, 600000, 50000, 1, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
-('TR050722000015', '2022-07-04 22:21:48', 275000, 300000, 25000, 1, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.');
+('TR150722000001', '2022-03-15 10:59:45', 80000, 100000, 20000, 1, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
+('TR150722000002', '2022-07-15 11:07:08', 40000, 50000, 10000, 1, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
+('TR150722000003', '2022-07-15 12:00:54', 55000, 55000, 0, 1, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.'),
+('TR150722000004', '2022-07-15 12:01:47', 55000, 60000, 5000, 1, 'Barang yang sudah dibeli tidak dapat dikembalikan/ditukar.');
 
 -- --------------------------------------------------------
 
@@ -260,7 +248,8 @@ INSERT INTO `tbl_user` (`user_id`, `user_nama`, `user_username`, `user_password`
 ALTER TABLE `tbl_barang`
   ADD PRIMARY KEY (`barang_id`),
   ADD KEY `barang_user_id` (`barang_user_id`),
-  ADD KEY `barang_kategori_id` (`barang_kategori_id`);
+  ADD KEY `barang_kategori_id` (`barang_kategori_id`),
+  ADD KEY `id_supplier` (`id_supplier`);
 
 --
 -- Indeks untuk tabel `tbl_beli`
@@ -325,13 +314,13 @@ ALTER TABLE `tbl_user`
 -- AUTO_INCREMENT untuk tabel `tbl_detail_beli`
 --
 ALTER TABLE `tbl_detail_beli`
-  MODIFY `d_beli_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=196;
+  MODIFY `d_beli_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=199;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_detail_jual`
 --
 ALTER TABLE `tbl_detail_jual`
-  MODIFY `d_jual_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
+  MODIFY `d_jual_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 
 --
 -- AUTO_INCREMENT untuk tabel `tbl_kategori`

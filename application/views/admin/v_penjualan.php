@@ -6,9 +6,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Produk By Mfikri.com">
-    <meta name="author" content="M Fikri Setiadi">
-
+    <meta name="description">
+    <meta name="author">
     <title>Aplikasi Penjualan</title>
     <?php
     $this->load->view('admin/footer');
@@ -32,7 +31,7 @@
     ?>
 
     <!-- Page Content -->
-    <div class="container" style="margin-top: 40px;">
+    <div class="container" style="margin-top: 90px;">
 
         <div class="col-lg-12">
             <center><?php echo $this->session->flashdata('msg'); ?></center>
@@ -63,7 +62,7 @@
                                             $var = $this->db->query("SELECT * FROM tbl_barang")->result_array();
                                             foreach ($var as $key => $row) { ?>
 
-                                                <option value="<?= $row['barang_id'] ?>"><?= $row['barang_id'] ?> | <?= $row['barang_nama'] ?></option>
+                                                <option value="<?= $row['barang_id'] ?>"><?= $row['barang_id'] ?> | <?= $row['barang_nama'] ?> | Stok : | <?= $row['barang_stok'] ?></option>
                                             <?php } ?>
                                         </select>
                                         <!-- <input size="20px" type="text" name="kode_brg" id="kode_brg"> -->

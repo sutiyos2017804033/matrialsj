@@ -71,7 +71,7 @@
                         </h4>
                         <hr style="border-style:groove;border-color:lightblue">
                         <?php
-                        $dt = date('d');
+                        $dt = date('m');
                         $vl = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual where month(jual_tanggal)='$dt'")->row_array();
 
                         ?>
@@ -82,44 +82,50 @@
                     </div>
                 </div>
                 <div class="col-md-4" style="padding:5px">
-                    <div class="bg-success" style="width:340px;height:173px;padding:10px">
+                    <div style="width:340px;height:173px;padding:10px;background-color:crimson;color:white">
                         <h4>
-                            BARANG HAMPIR HABIS =< 10 </h4>
-                                <hr style="border-style:groove;border-color:lightblue">
-                                <h6> <b>3 Teratas</b> </h6>
-                                <?php
-                                $dt = date('d');
-                                $v = $this->db->query("SELECT * FROM tbl_barang where barang_stok >= 34 limit 3")->result_array();
-                                foreach ($v as $i) {
-                                ?>
-                                    <h7>
-                                        <?= $i['barang_nama'] ?>
-                                        <br>
-                                    </h7>
-                                <?php }  ?>
-
-                    </div>
-                </div>
-                <div class="col-md-4" style="padding:5px ;" style="height:800px">
-                    <div class="bg-warning" style="width:340px;height:173px;padding:10px">
-                        <h4>
-                            BARANG PALING LARIS </h4>
+                            BARANG SUDAH HABIS </h4>
                         <hr style="border-style:groove;border-color:lightblue">
                         <h6> <b>3 Teratas</b> </h6>
                         <?php
                         $dt = date('d');
-                        $v = $this->db->query("SELECT d_jual_barang_nama, SUM(d_jual_qty) as qty FROM tbl_detail_jual
-                    GROUP BY d_jual_barang_nama ORDER BY  qty DESC LIMIT 3;")->result_array();
+                        $n = 1;
+                        $v = $this->db->query("SELECT * FROM tbl_barang where barang_stok = 0 limit 3")->result_array();
                         foreach ($v as $i) {
                         ?>
                             <h7>
-                                <?= $i['d_jual_barang_nama'] ?>
+                                <?= $n++; ?>.
+                                <?= $i['barang_nama'] ?> | Stok : <?= $i['barang_stok'] ?>
                                 <br>
                             </h7>
                         <?php }  ?>
 
                     </div>
                 </div>
+
+                <div class="col-md-4" style="padding:5px">
+                    <div class="bg-warning" style="width:340px;height:173px;padding:10px;background-color:gold;color:black">
+                        <h4>
+                            BARANG HAMPIR HABIS =< 10 </h4>
+                                <hr style="border-style:groove;border-color:lightblue">
+                                <h6> <b>3 Teratas</b> </h6>
+                                <?php
+                                $dt = date('d');
+                                $n = 1;
+                                $v = $this->db->query("SELECT * FROM tbl_barang where barang_stok <= 10 limit 3")->result_array();
+                                foreach ($v as $i) {
+                                ?>
+                                    <h7>
+                                        <?= $n++; ?>.
+                                        <?= $i['barang_nama'] ?> | Stok : <?= $i['barang_stok'] ?>
+                                        <br>
+                                    </h7>
+                                <?php }  ?>
+
+                    </div>
+                </div>
+
+
             </div>
         <?php  } ?>
 
@@ -135,7 +141,7 @@
                         </h4>
                         <hr style="border-style:groove;border-color:lightblue">
                         <?php
-                        $dt = date('d');
+                        $dt = date('m');
                         $vl = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual where month(jual_tanggal)='$dt'")->row_array();
 
                         ?>
@@ -146,41 +152,45 @@
                     </div>
                 </div>
                 <div class="col-md-4" style="padding:5px">
-                    <div class="bg-success" style="width:340px;height:173px;padding:10px">
+                    <div style="width:340px;height:173px;padding:10px;background-color:crimson;color:white">
+                        <h4>
+                            BARANG SUDAH HABIS </h4>
+                        <hr style="border-style:groove;border-color:lightblue">
+                        <h6> <b>3 Teratas</b> </h6>
+                        <?php
+                        $dt = date('d');
+                        $n = 1;
+                        $v = $this->db->query("SELECT * FROM tbl_barang where barang_stok = 0 limit 3")->result_array();
+                        foreach ($v as $i) {
+                        ?>
+                            <h7>
+                                <?= $n++; ?>.
+                                <?= $i['barang_nama'] ?> | Stok : <?= $i['barang_stok'] ?>
+                                <br>
+                            </h7>
+                        <?php }  ?>
+
+                    </div>
+                </div>
+
+                <div class="col-md-4" style="padding:5px">
+                    <div class="bg-warning" style="width:340px;height:173px;padding:10px;background-color:gold;color:black">
                         <h4>
                             BARANG HAMPIR HABIS =< 10 </h4>
                                 <hr style="border-style:groove;border-color:lightblue">
                                 <h6> <b>3 Teratas</b> </h6>
                                 <?php
                                 $dt = date('d');
-                                $v = $this->db->query("SELECT * FROM tbl_barang where barang_stok >= 34 limit 3")->result_array();
+                                $n = 1;
+                                $v = $this->db->query("SELECT * FROM tbl_barang where barang_stok <= 10 limit 3")->result_array();
                                 foreach ($v as $i) {
                                 ?>
                                     <h7>
-                                        <?= $i['barang_nama'] ?>
+                                        <?= $n++; ?>.
+                                        <?= $i['barang_nama'] ?> | Stok : <?= $i['barang_stok'] ?>
                                         <br>
                                     </h7>
                                 <?php }  ?>
-
-                    </div>
-                </div>
-                <div class="col-md-4" style="padding:5px ;" style="height:800px">
-                    <div class="bg-warning" style="width:340px;height:173px;padding:10px">
-                        <h4>
-                            BARANG PALING LARIS </h4>
-                        <hr style="border-style:groove;border-color:lightblue">
-                        <h6> <b>3 Teratas</b> </h6>
-                        <?php
-                        $dt = date('d');
-                        $v = $this->db->query("SELECT d_jual_barang_nama, SUM(d_jual_qty) as qty FROM tbl_detail_jual
-                    GROUP BY d_jual_barang_nama ORDER BY  qty DESC LIMIT 3;")->result_array();
-                        foreach ($v as $i) {
-                        ?>
-                            <h7>
-                                <?= $i['d_jual_barang_nama'] ?>
-                                <br>
-                            </h7>
-                        <?php }  ?>
 
                     </div>
                 </div>
@@ -204,11 +214,11 @@
                 <div class="col-lg-12">
 
                 </div>
-                <div class="col-md-6 portfolio-item">
-                    <div class="thumbnail" style="height: 400px;">
+                <div class="col-md-11 portfolio-item">
+                    <div class="thumbnail" style="height: 300px;">
 
 
-                        <h3 class="card-title">GRAFIK PENJUALAN</h3>
+                        <h3 class="card-title">GRAFIK PENJUALAN PERBULAN</h3>
 
                         <canvas id="myChart"></canvas>
 
@@ -222,31 +232,75 @@
                     var myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: ["2020", "2021", "2022", "2023"],
+                            labels: ["Januari", "Februari", "Maret", "April", "Mei",
+                                "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                            ],
                             datasets: [{
                                 label: 'Grafik Penjualan',
                                 data: [
                                     <?php
-                                    $jumlah_bekerja = $this->db->query("SELECT * FROM tbl_jual WHERE YEAR (jual_tanggal)='2020';");
-                                    echo $jumlah_bekerja->num_rows();
+                                    $m = date('m');
+                                    $y = date('Y');
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=01 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
                                     ?>,
                                     <?php
-                                    $jumlah_bekerja = $this->db->query("SELECT * FROM tbl_jual WHERE YEAR (jual_tanggal)='2021';");
-                                    echo $jumlah_bekerja->num_rows();
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=02 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
                                     ?>,
                                     <?php
-                                    $jumlah_bekerja = $this->db->query("SELECT * FROM tbl_jual WHERE YEAR (jual_tanggal)='2022';");
-                                    echo $jumlah_bekerja->num_rows();
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=03 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
                                     ?>,
                                     <?php
-                                    $jumlah_bekerja = $this->db->query("SELECT * FROM tbl_jual WHERE YEAR (jual_tanggal)='2023';");
-                                    echo $jumlah_bekerja->num_rows();
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=04 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
                                     ?>,
+                                    <?php
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=05 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
+                                    ?>,
+                                    <?php
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=06 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
+                                    ?>,
+                                    <?php
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=07 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
+                                    ?>,
+                                    <?php
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=08 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
+                                    ?>,
+                                    <?php
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=09 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
+                                    ?>,
+                                    <?php
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=10 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
+                                    ?>,
+                                    <?php
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=11 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
+                                    ?>,
+                                    <?php
+                                    $jumlah_bekerja = $this->db->query("SELECT sum(jual_total) as total FROM tbl_jual WHERE MONTH(jual_tanggal)=12 AND YEAR(jual_tanggal)='$y'")->row_array();
+                                    echo $jumlah_bekerja['total'];
+                                    ?>
 
                                 ],
                                 backgroundColor: [
                                     'rgb(37,9,149)',
                                     'rgb(64,191,253)',
+                                    'rgb(164,191,3)',
+                                    'rgb(111,191,3)',
+                                    'rgb(122,191,333)',
+                                    'rgb(64,991,333)',
+                                    'rgb(64,191,3)',
+                                    'rgb(64,191,3)',
+                                    'rgb(64,191,3)',
+                                    'rgb(64,191,3)',
                                     'rgb(64,191,3)',
 
                                 ],
@@ -271,57 +325,6 @@
                     });
                 </script>
 
-                <?php
-                $data = $this->db->query("SELECT d_jual_barang_nama, SUM(d_jual_total) d_jual_total 
-            FROM tbl_detail_jual GROUP BY d_jual_barang_nama 
-            ORDER BY d_jual_total DESC LIMIT 1")
-                ?>
-                <?php
-
-                foreach ($data->result() as $pie) {
-                    $nama[] = $pie->d_jual_barang_nama;
-                    $total[] = (float) $pie->d_jual_total;
-                } ?>
-
-                <script>
-                    var ctx = document.getElementById("barang").getContext('2d');
-                    var barang = new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: <?php echo json_encode($nama); ?>,
-                            datasets: [{
-                                label: 'Grafik Penjualan',
-                                data: [
-
-                                    <?php echo json_encode($total); ?>
-
-                                ],
-                                backgroundColor: [
-                                    'rgb(0,191,255)',
-                                    'rgba(250, 0, 0)',
-                                    'rgba(250,9, 10)'
-
-                                ],
-                                borderColor: [
-                                    'rgba(255,99,132,1)',
-                                    'rgba(54, 162, 235, 1)',
-                                    'rgba(255, 206, 86, 0)'
-
-                                ],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            }
-                        }
-                    });
-                </script>
 
             <?php } ?>
         </div>

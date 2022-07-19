@@ -44,6 +44,7 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;width:40px;">No</th>
+                        <th>Dari Supplier</th>
                         <th>Kode Barang</th>
                         <th>Nama Barang</th>
                         <th>Satuan</th>
@@ -59,6 +60,7 @@
                     $no = 0;
                     foreach ($data->result_array() as $a) :
                         $no++;
+                        $sn = $a['suplier_nama'];
                         $id = $a['barang_id'];
                         $nm = $a['barang_nama'];
                         $satuan = $a['barang_satuan'];
@@ -72,6 +74,7 @@
                     ?>
                         <tr>
                             <td style="text-align:center;"><?php echo $no; ?></td>
+                            <td><?php echo $sn; ?></td>
                             <td><?php echo $id; ?></td>
                             <td><?php echo $nm; ?></td>
                             <td style="text-align:center;"><?php echo $satuan; ?></td>
@@ -108,6 +111,21 @@
                             <input name="kobar" class="form-control" type="text" placeholder="Kode Barang..." style="width:335px;" required>
                         </div>
                     </div>-->
+                        <div class="form-group">
+                            <label class="control-label col-xs-3">Supplier</label>
+                            <div class="col-xs-9">
+                                <select name="supplier" class="selectpicker show-tick form-control" data-live-search="true" title="Pilih Kategori" data-width="80%" placeholder="Pilih Kategori" required>
+                                    <?php foreach ($sup->result_array() as $su) {
+                                        $id_sup = $su['suplier_id'];
+                                        $nm_sup = $su['suplier_nama'];
+                                    ?>
+                                        <option value="<?php echo $id_sup; ?>"><?php echo $nm_sup; ?></option>
+                                    <?php } ?>
+
+                                </select>
+                            </div>
+                        </div>
+
 
                         <div class="form-group">
                             <label class="control-label col-xs-3">Nama Barang</label>
